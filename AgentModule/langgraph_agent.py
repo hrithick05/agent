@@ -78,6 +78,73 @@ TOOLS: Dict[str, Any] = {
 }
 
 
+def _build_fallback_selectors(platform_name: str) -> Dict[str, Dict[str, Any]]:
+	"""Platform-aware fallback selectors for core e-commerce fields."""
+	platform = (platform_name or "generic").lower()
+	# Flipkart
+	if "flipkart" in platform:
+		return {
+			"product_container": {"field": "product_container", "selector_type": "css", "selectors": ["div[data-id]"]},
+			"name": {"field": "name", "selector_type": "css", "selectors": ["a.s1Q9rs", "div._4rR01T", "a.IRpwTa", "div.KzDlHZ", "a[title]"]},
+			"current_price": {"field": "current_price", "selector_type": "css", "selectors": ["div._30jeq3._16Jk6d", "div._30jeq3", "div.Nx9bqj"]},
+			"original_price": {"field": "original_price", "selector_type": "css", "selectors": ["div._3I9_wc._27UcVY", "div.yRaY8j", "div._3I9_wc", "span[aria-hidden='true'] span._3I9_wc"]},
+			"rating": {"field": "rating", "selector_type": "css", "selectors": ["div._3LWZlK", "span._1lRcqv", "div.XQDdHH"]},
+			"reviews": {"field": "reviews", "selector_type": "css", "selectors": ["span._2_R_DZ", "span._2_R_DZ span", "span.Wphh3N"]},
+			"discount": {"field": "discount", "selector_type": "css", "selectors": ["div._3Ay6Sb span", "div.UkUFwK span", "span[class*='discount']"]},
+			"offers": {"field": "offers", "selector_type": "css", "selectors": ["div[class*='offer']", "span[class*='offer']", "span[class*='coupon']"]},
+		}
+
+	# Ajio
+	if "ajio" in platform:
+		return {
+			"product_container": {"field": "product_container", "selector_type": "css", "selectors": ["div[class*='product']", "li[class*='product']", "div[itemprop='itemListElement']", "li[id^='pid_']", "article"]},
+			"name": {"field": "name", "selector_type": "css", "selectors": ["a[title]", "div[class*='name']", "h2", "h3"]},
+			"current_price": {"field": "current_price", "selector_type": "css", "selectors": ["span[class*='price']", "div[class*='price'] span", "[data-price]"]},
+			"original_price": {"field": "original_price", "selector_type": "css", "selectors": ["span[class*='mrp']", "span.strike", "div[class*='price'] s"]},
+			"rating": {"field": "rating", "selector_type": "css", "selectors": ["span[class*='rating']", "[aria-label*='out of']"]},
+			"reviews": {"field": "reviews", "selector_type": "css", "selectors": ["span[class*='ratings']"]},
+			"discount": {"field": "discount", "selector_type": "css", "selectors": ["span[class*='discount']", "span:contains(% off)"]},
+			"offers": {"field": "offers", "selector_type": "css", "selectors": ["div[class*='offer']", "span[class*='coupon']"]},
+		}
+
+	# Myntra
+	if "myntra" in platform:
+		return {
+			"product_container": {"field": "product_container", "selector_type": "css", "selectors": ["li.product-base", "li[data-id]"]},
+			"name": {"field": "name", "selector_type": "css", "selectors": ["h3.product-brand", "h4.product-product", "div.product-product"]},
+			"current_price": {"field": "current_price", "selector_type": "css", "selectors": ["span.product-discountedPrice", "span.product-price"]},
+			"original_price": {"field": "original_price", "selector_type": "css", "selectors": ["span.product-strike", "span.product-mrp"]},
+			"rating": {"field": "rating", "selector_type": "css", "selectors": ["div.ratings", "div.ratings-container span", "[aria-label*='out of']"]},
+			"reviews": {"field": "reviews", "selector_type": "css", "selectors": ["span.product-ratingsCount"]},
+			"discount": {"field": "discount", "selector_type": "css", "selectors": ["span.product-discountPercentage"]},
+			"offers": {"field": "offers", "selector_type": "css", "selectors": ["div[class*='offer']", "span[class*='coupon']"]},
+		}
+
+	# Amazon
+	if "amazon" in platform:
+		return {
+			"product_container": {"field": "product_container", "selector_type": "css", "selectors": ["div.s-result-item[data-asin]", "div[data-component-type='s-search-result']"]},
+			"name": {"field": "name", "selector_type": "css", "selectors": ["h2 a.a-link-normal.a-text-normal span", "h2 a span", "h2 span"]},
+			"current_price": {"field": "current_price", "selector_type": "css", "selectors": ["span.a-price span.a-offscreen", "span.a-price-whole", "span.a-offscreen"]},
+			"original_price": {"field": "original_price", "selector_type": "css", "selectors": ["span.a-text-price span.a-offscreen", "span.a-price.a-text-price span"]},
+			"rating": {"field": "rating", "selector_type": "css", "selectors": ["span.a-icon-alt"]},
+			"reviews": {"field": "reviews", "selector_type": "css", "selectors": ["span.a-size-base.s-underline-text", "span[aria-label$='ratings']"]},
+			"discount": {"field": "discount", "selector_type": "css", "selectors": ["span.savingsPercentage", "span.a-letter-space+span"]},
+			"offers": {"field": "offers", "selector_type": "css", "selectors": ["span.coupon", "span.promo"]},
+		}
+
+	# Generic fallback
+	return {
+		"product_container": {"field": "product_container", "selector_type": "css", "selectors": ["[data-id]", "li", "article", "div"]},
+		"name": {"field": "name", "selector_type": "css", "selectors": ["h1", "h2", "h3", "a[title]"]},
+		"current_price": {"field": "current_price", "selector_type": "css", "selectors": ["[class*='price']", "[data-price]"]},
+		"original_price": {"field": "original_price", "selector_type": "css", "selectors": ["s", ".strike", "[class*='mrp']"]},
+		"rating": {"field": "rating", "selector_type": "css", "selectors": ["[aria-label*='out of']"]},
+		"reviews": {"field": "reviews", "selector_type": "css", "selectors": ["span:contains(reviews)", "span:contains(ratings)"]},
+		"discount": {"field": "discount", "selector_type": "css", "selectors": ["span:contains(% off)", "[class*='discount']"]},
+	}
+
+
 def fetch_html_node(state: ScrapingAgentState) -> ScrapingAgentState:
 	"""Step 1: Fetch and analyze HTML content."""
 	print(f"🌐 Step 1: Fetching HTML from {state['url']}")
@@ -164,34 +231,25 @@ def configure_selectors_node(state: ScrapingAgentState) -> ScrapingAgentState:
 	print("⚙️ Step 3: Configuring selectors")
 	
 	try:
-		# Always use model-driven selector generation (no templates)
-		print("🤖 Using model-driven selector generation (templates disabled)...")
+		print("🤖 Generating selectors with model and merging fallbacks...")
 		selector_configs = generate_selectors_with_model(state.get("url", "")) or {}
 		if selector_configs:
 			print("🔧 Model returned selectors for fields:", list(selector_configs.keys()))
 		else:
-			print("❌ Model did not return selectors and fallbacks are disabled. Aborting.")
-			return {
-				**state,
-				"current_step": "error",
-				"errors": state.get("errors", []) + [
-					"Model failed to produce selectors. Set GOOGLE_API_KEY and ensure network access."
-				],
-				"success": False
-			}
+			print("⚠️ Model did not return selectors; starting with empty config.")
+			selector_configs = {}
 
-		# Hard requirement: product_container selectors must be present
+		fallbacks = _build_fallback_selectors(state.get("platform_name", "generic"))
+		required = ["product_container","name","current_price","original_price","rating","reviews","discount"]
+		for rf in required:
+			cfg = selector_configs.get(rf)
+			if not isinstance(cfg, dict) or not cfg.get("selectors"):
+				selector_configs[rf] = fallbacks.get(rf, {})
+
+		# Final must-have
 		pcfg = selector_configs.get("product_container", {})
 		if not isinstance(pcfg, dict) or not pcfg.get("selectors"):
-			print("❌ Missing product_container selectors from model output. Aborting.")
-			return {
-				**state,
-				"current_step": "error",
-				"errors": state.get("errors", []) + [
-					"Model output missing product_container selectors"
-				],
-				"success": False
-			}
+			return {**state, "current_step":"error", "errors": state.get("errors", []) + ["No product_container selectors available"], "success": False}
 		
 		# Set selectors for each field
 		selector_template = {}
@@ -205,10 +263,14 @@ def configure_selectors_node(state: ScrapingAgentState) -> ScrapingAgentState:
 		for field, config in selector_configs.items():
 			if field in target_fields:
 				print(f"🔧 Configuring selectors for field: {field}")
+				stype = (config.get("selector_type") or config.get("type") or "css").lower()
+				selectors_list = config.get("selectors", [])
+				if stype == "css" and any(str(s).strip().startswith(("//", ".//")) for s in selectors_list):
+					stype = "xpath"
 				result = set_selector(
-					config["field"],
-					config["selector_type"], 
-					config["selectors"]
+					config.get("field", field),
+					stype,
+					selectors_list
 				)
 				if "error" not in result:
 					selector_template[field] = result.get("template", {}).get(field, {})
