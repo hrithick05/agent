@@ -1,0 +1,29 @@
+# Web Scraping and HTML Processing
+beautifulsoup4
+lxml
+requests
+
+# Async Web Crawling
+crawl4ai
+aiohttp
+asyncio
+
+# Data Processing and Analysis
+pandas
+numpy
+
+# Database Integration
+supabase
+
+# Environment Variables
+python-dotenv
+
+# HTTP Client
+httpx
+
+# JSON Processing
+ujson
+
+# AI and LangGraph
+google-generativeai
+langgraph

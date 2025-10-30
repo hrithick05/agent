@@ -1,0 +1,52 @@
+# ============================================================================
+# LangGraph Web Scraping Bot - Environment Variables Template
+# ============================================================================
+# Instructions:
+# 1. Copy this file and create a file named ".env" in the project root
+# 2. Fill in your actual values below
+# 3. The .env file will be automatically loaded by langgraph_agent.py
+#
+# On Windows (PowerShell):
+#   Copy-Item ENV_TEMPLATE.txt .env
+#
+# On Linux/Mac:
+#   cp ENV_TEMPLATE.txt .env
+# ============================================================================
+
+# ============================================================================
+# Google Gemini API Configuration
+# ============================================================================
+# Get your API key from: https://ai.google.dev/
+# The key below is configured for Gemini 2.5
+GEMINI_API_KEY=AIzaSyD-mGgMOg9hfnnQuLoDGF_c2STQzrRxYMw
+
+# ============================================================================
+# Supabase Database Configuration
+# ============================================================================
+# Get these from your Supabase project dashboard: https://supabase.com/dashboard
+# 
+# Project URL: 
+#   - Go to Settings > API > Project URL
+#   - Copy the URL (e.g., https://xxxxx.supabase.co)
+#
+# API Key:
+#   - Go to Settings > API > Project API keys
+#   - Copy the "anon" or "public" key (not the service_role key)
+#
+SUPABASE_URL=https://whfjofihihlhctizchmj.supabase.co
+SUPABASE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndoZmpvZmloaWhsaGN0aXpjaG1qIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEzNzQzNDMsImV4cCI6MjA3Njk1MDM0M30.OsJnOqeJgT5REPg7uxkGmmVcHIcs5QO4vdyDi66qpR0
+
+# Supabase table name (optional, defaults to 'scraped_products' if not set)
+# This is the table name where scraped products will be saved
+SUPABASE_TABLE_NAME=scraped_products
+
+# ============================================================================
+# Notes:
+# ============================================================================
+# - All values should be on one line (no line breaks in the middle of values)
+# - Do not add quotes around values (they will be read as part of the value)
+# - Do not add spaces around the = sign
+# - Comment lines start with #
+# - Empty lines are ignored
+# ============================================================================
+
