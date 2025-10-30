@@ -73,3 +73,4 @@ The agent uses the same global state as `mcp_server.py`:
 All tools access these globals from `AgentModule.app` module.
 
 
+

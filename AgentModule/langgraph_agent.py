@@ -155,7 +155,19 @@ def fetch_html_node(state: ScrapingAgentState) -> ScrapingAgentState:
 			return {
 				**state,
 				"current_step": "error",
-				"errors": state.get("errors", []) + [f"HTML fetch failed: {result['error']}"],
+				"errors": state.get("errors", []) + [f"HTML fetch failed: {result['error']}"] ,
+				"success": False
+			}
+		
+		# Probe for actual HTML presence (avoid proceeding with empty content)
+		probe = readHTML(1, 1)
+		if isinstance(probe, str) and probe.strip().lower().startswith("no html content available"):
+			return {
+				**state,
+				"current_step": "error",
+				"errors": state.get("errors", []) + [
+					"HTML fetch error: No HTML content available. If Playwright was just installed/updated, run 'playwright install' to download browsers or disable JS rendering."
+				],
 				"success": False
 			}
 		
@@ -232,7 +244,12 @@ def configure_selectors_node(state: ScrapingAgentState) -> ScrapingAgentState:
 	
 	try:
 		print("🤖 Generating selectors with model and merging fallbacks...")
-		selector_configs = generate_selectors_with_model(state.get("url", "")) or {}
+		# Guard model generation; on any failure, fall back to platform templates only
+		try:
+			selector_configs = generate_selectors_with_model(state.get("url", "")) or {}
+		except Exception as _e:
+			print(f"[WARN] Model selector generation failed: {_e}. Falling back to templates only.")
+			selector_configs = {}
 		if selector_configs:
 			print("🔧 Model returned selectors for fields:", list(selector_configs.keys()))
 		else:
